@@ -1,0 +1,15 @@
+ext {
+
+    is_offline_mode = false
+
+    // EXAMPLE OF STAGING BASE URL WHEN MANAGING OTHER ENV
+    base_url_staging = "\"https://followmi.fr/da/FakeAPI/\""
+
+    // EXAMPLE OF PRODUCTION BASE URL
+    base_url_release = "\"https://followmi.fr/da/FakeAPI/\""
+
+    // MOVIES ENDPOINTS
+    load_movies_url = "\"movies.json\""
+
+
+}

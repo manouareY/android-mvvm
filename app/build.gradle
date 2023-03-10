@@ -1,0 +1,157 @@
+
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("androidx.navigation.safeargs.kotlin")
+    id 'org.jetbrains.kotlin.android'  apply false
+    id 'com.google.devtools.ksp' version '1.6.20-1.0.4'
+    id 'org.jetbrains.kotlin.plugin.parcelize'
+
+}
+apply plugin: 'kotlin-kapt'
+apply from: 'apiservices.gradle'
+
+android {
+    compileSdkVersion 33
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.example.myapplication"
+        minSdkVersion 19
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // APP ENDPOINTS
+        buildConfigField "String", "LOAD_MOVIES_API_URL", load_movies_url
+
+        // END APP ENDPOINTS
+
+        buildFeatures {
+            viewBinding = true
+        }
+
+        javaCompileOptions{
+            annotationProcessorOptions{
+                arguments= ["room.schemaLocation":
+                                    "$projectDir/schemas".toString()]
+            }}
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main.java.srcDir('build/generated/source/navigation-args')
+        }
+
+
+
+
+    buildTypes {
+        debug {
+            buildConfigField "String", 'BASE_URL', base_url_staging
+        }
+
+        release {
+            buildConfigField "String", 'BASE_URL', base_url_release
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+
+
+}
+
+dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+
+    /* app dependencies version*/
+    def app_versions = [:]
+    app_versions.koin_kotlin_version = '3.3.3'
+    app_versions.koin_android_version = '3.3.3'
+    app_versions.lifecycle_version = "2.5.1"
+    app_versions.fragment_ktx_version = "1.5.5"
+    app_versions.android_core_ktx = "1.3.2"
+    app_versions.appcompat = "1.6.1"
+    app_versions.google_material = "1.2.1"
+    app_versions.androidx_constraintlayout = "2.1.4"
+    app_versions.junit = "4.13.2"
+    app_versions.androidx_test_junit = "5.9.2"
+    app_versions.androidx_espresso_core = "3.3.0"
+    app_versions.coroutines_android = "1.4.1"
+    app_versions.coroutines_core = "1.4.2"
+    app_versions.timber = "4.7.1"
+    app_versions.retrofit = "2.9.0"
+    app_versions.gson_converter = "2.9.0"
+    app_versions.logging_interceptor = "4.7.2"
+    app_versions.glide = "4.15.0"
+    app_versions.room_version = "2.5.0"
+    app_versions.koin_ksp_version = "1.1.1"
+    app_versions.mockitoVersion = "5.1.1"
+    app_versions.mockitoKotlinVersion = "4.1.0"
+    app_versions.mockkVersion = "1.13.4"
+    app_versions.coroutines_test = "1.6.4"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    implementation "androidx.core:core-ktx:$app_versions.android_core_ktx"
+    implementation "androidx.appcompat:appcompat:$app_versions.appcompat"
+    implementation "androidx.constraintlayout:constraintlayout:$app_versions.androidx_constraintlayout"
+
+    /* android viewModel and liveData*/
+    implementation "androidx.lifecycle:lifecycle-common-java8:$app_versions.lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$app_versions.lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$app_versions.lifecycle_version"
+    implementation "androidx.fragment:fragment-ktx:$app_versions.fragment_ktx_version"
+
+    /*coroutines library */
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$app_versions.coroutines_android"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$app_versions.coroutines_core"
+
+    /* Timber library */
+    implementation "com.jakewharton.timber:timber:$app_versions.timber"
+
+    /*Retrofit */
+    implementation "com.squareup.retrofit2:retrofit:$app_versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$app_versions.gson_converter"
+    implementation "com.squareup.okhttp3:logging-interceptor:$app_versions.logging_interceptor"
+
+    // KOIN DEPENDENCIES
+    /*Koin Core*/
+    implementation "io.insert-koin:koin-core:$app_versions.koin_kotlin_version"
+    implementation "io.insert-koin:koin-android:$app_versions.koin_android_version"
+
+    /*AndroidX Navigation*/
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_ui_ktx"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_ui_ktx"
+
+    /*Glide Dependencies*/
+    implementation "com.github.bumptech.glide:glide:$app_versions.glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$app_versions.glide"
+
+    /*room Dependencies*/
+    implementation("androidx.room:room-runtime:$app_versions.room_version")
+    annotationProcessor("androidx.room:room-compiler:$app_versions.room_version")
+    ksp("androidx.room:room-compiler:$app_versions.room_version")
+    kapt "androidx.room:room-compiler:$app_versions.room_version"
+    //Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$app_versions.room_version")
+
+    /* test Dependencies */
+    testImplementation "junit:junit:$app_versions.junit"
+    testImplementation "org.mockito:mockito-core:$app_versions.mockitoVersion"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$app_versions.mockitoKotlinVersion"
+    testImplementation "io.mockk:mockk:$app_versions.mockkVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$app_versions.coroutines_test"
+
+}
